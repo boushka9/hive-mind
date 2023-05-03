@@ -16,14 +16,9 @@ const userSchema = new Schema(
       required: true,
       match: /.+\@.+\..+/, // Regex for @ . of email
     },
-    github: {
-      type: String,
-      required: true,
-      max_length: 50,
-    },
     thoughts: [{
         type: Schema.Types.ObjectId,
-        ref: 'Thoughts'
+        ref: 'Thought'
     }],
     friends: [{
         type: Schema.Types.ObjectId,

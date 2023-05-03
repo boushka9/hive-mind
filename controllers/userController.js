@@ -2,18 +2,16 @@
 const { User, Thought } = require('../models');
 
 module.exports = {
-  // Get all Users (actual number included bc of aggregate func)
+  // Get all Users
   async getUsers(req, res) {
     try {
       const users = await User.find();
 
-      // List of all users as well as number of users
-      const userObj = {
-        users,
-        userCount: await userCount(),
-      };
-    // Return all user data in JSON format 
-      res.json(userObj);
+      // List of all users
+      const allUsers = users;
+      
+      // Return all user data in JSON format 
+      res.json(allUsers);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -22,11 +20,12 @@ module.exports = {
   // Get a single user and include their friends and thoughts 
   async getSingleUser(req, res) {
     try {
-      const userData = await userData.findOne({ _id: req.params.userId }) //Find by the ID in the req parameters
-        .select('-__v')
+      const userData = await User.findOne({ _id: req.params.userId }) //Find by the ID in the req parameters
+        .select('-__v') // Make response more concise by ignoring versions
         .populate('friends')
         .populate('thoughts');
 
+        // if user can't be found by search id
       if (!userData) {
         return res.status(404).json({ message: 'No user with that ID' })
       }
@@ -40,14 +39,14 @@ module.exports = {
   // create a new user
   async createUser(req, res) {
     try {
-      const newUser = await newUser.create(req.body);
+      const newUser = await User.create(req.body);
       // Return new user data in JSON format 
       res.json(newUser);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Update a user by their id
+  // Update a user by their id with the $set property
   async updateUser(req, res) {
     try {
         const updateUserData = await User.findByIdAndUpdate(
@@ -55,6 +54,7 @@ module.exports = {
             { $set: req.body },
             { runValidators: true, new: true } // Return updated user, 
         );
+        // If user can't be found to update
         if(!updateUserData) {
             return res.status(404).json({ message: 'No user with that ID' })
         }
@@ -66,11 +66,12 @@ module.exports = {
     }
   },
 
-  // Find user and their thoughts by user id and delete them
+  // Find a specific user and their thoughts by the user id to delete them
   async deleteUser(req, res) {
     try {
-      const deleteUser = await deleteUser.findOneAndDelete({ _id: req.params.userId }).select('+thoughts');
+      const deleteUser = await User.findOneAndDelete({ _id: req.params.userId }).select('+thoughts');
 
+      // If User can be found res w error msg
       if (!deleteUser) {
         return res.status(404).json({ message: 'No such user exists' });
       }
@@ -78,6 +79,7 @@ module.exports = {
       // From user id - delete that user's thoughts
       await Thought.deleteMany({ _id: { $in: deleteUser.thoughts }})
 
+      // On successful delete message
       res.json({ message: 'User and their thoughts successfully deleted' });
     } catch (err) {
       console.log(err);

@@ -88,7 +88,46 @@ module.exports = {
   },
 
   // Add Friends
-
+  async addFriend(req, res) {
+    try {
+      const newFriend = await User.findOneAndUpdate( // Updating existing User to add a friend to their friends array
+        { _id: req.params.userId }, // Search the User document for entered ID
+        { $addToSet: { friends: req.params.friendId } }, // Add to the set (array) of friends, the value given in params
+        { new: true } // Return updated document instead of original 
+      );
+        // If unable to find User to add friend to
+      if (!newFriend) {
+        return res.status(404).json({ message: 'Unable to add friend to User with that ID.' });
+      }
+      // Respond with Updated User+newFriend in JSON format
+      res.json(newFriend);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+  
   //Remove Friends
+  async deleteFriend(req, res) {
+    try {
+        const deleteFriend = await User.findOneAndUpdate( // Updating existing User to remove a friend from their friends array
+        { _id: req.params.userId }, // Search User document for entered ID
+        { $pull: { friends: req.params.friendId } }, // Remove entered ID from the set of IDs in friends array
+        { new: true } // Return Updated User/friends array 
+        );
+
+        // If User is not found or unable to remove friend
+        if(!deleteFriend) {
+            return res.status(404).json({ message: 'Unable to remove friend from User with that ID' })
+        }
+
+        // If friend is removed respond with updated User/friends in JSON format
+        res.json(deleteFriend)
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err)
+    }
+  }
 
 };

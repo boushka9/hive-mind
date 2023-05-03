@@ -1,10 +1,13 @@
 // Import ODM for MongoDB
-const { connect, connection } = require('mongoose');
+const mongoose = require('mongoose');
 
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+})
+.then(() => console.log('MongoDB successfully connected'))
+.catch((err) => console.log(err));
 
-const connectionString =
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/networkDB';
-
-connect(connectionString);
-
-module.exports = connection;
+module.exports = mongoose.connection;

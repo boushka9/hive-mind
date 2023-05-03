@@ -1,4 +1,4 @@
-const { Thought, Thought } = require('../models');
+const { Thought, Thought, User } = require('../models');
 
 module.exports = {
   // Get all thoughts 
@@ -70,6 +70,16 @@ module.exports = {
       if (!deleteThought) {
         return res.status(404).json({ message: 'No such thought exists' });
       }
+
+      // Remove the corresponding thoughtID from the Users thoughts array
+      const userThoughts = await User.findOneAndUpdate(
+        { thoughts: req.params.thoughtId }, // Find the thought by it's id
+        { $pull: { thoughts: req.params.thoughtId } }, // Pull (remove) that id from the User's thought array
+        { new: true } // Return the updated User document 
+      )
+      if (!userThoughts) {
+        return res.status(404).json({ message: "No such thought ID in the user's array"})
+      }
       // If thought was successfully deleted, send success msg
       res.json({ message: 'Thought was successfully deleted' });
     } catch (err) {
@@ -78,8 +88,9 @@ module.exports = {
     }
   },
 
-  // Add Friends
+  // Add reaction to a thought
+  
 
-  //Remove Friends
+  // Remove reaction from a thought
 
 };

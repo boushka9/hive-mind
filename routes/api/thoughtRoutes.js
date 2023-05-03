@@ -1,5 +1,5 @@
 // Import Express and functions in controller file
-const router = require('express').router();
+const router = require('express').Router();
 const {
     getThoughts,
     getSingleThought,
@@ -12,9 +12,11 @@ const {
 router.route('/').get(getThoughts).post(createThought); // Chain .get and .post for requests to '/' endpoint
 
 //   /api/thoughts/:thoughtId
-router.route('/:ThoughtId').get(getSingleThought).put(updateThought).delete(deleteThought); // Chain .get, .put, and .delete for requests to '/:ThoughtId' endpoint
+router.route('/:thoughtId').get(getSingleThought).put(updateThought).delete(deleteThought); // Chain .get, .put, and .delete for requests to '/:thoughtId' endpoint
 
-// /api/thoughts/ + reaction routes
+// /api/thoughts/:thoughtId/reactions
+//router.route('/:thoughtId/reactions').post(createReaction).delete(deleteReaction); // Chain .post and .delete for requests to '/:thoughtId/reactions' endpoint
+
 
 
 module.exports = router

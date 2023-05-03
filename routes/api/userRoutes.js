@@ -1,5 +1,5 @@
 // Import Express and functions in controller file
-const router = require('express').router();
+const router = require('express').Router();
 const {
     getUsers,
     getSingleUser,
@@ -14,7 +14,8 @@ router.route('/').get(getUsers).post(createUser); // Chain .get and .post for re
 //   /api/users/:userId
 router.route('/:userId').get(getSingleUser).put(updateUser).delete(deleteUser); // Chain .get, .put, and .delete for requests to '/:userId' endpoint
 
-// /api/users/ + friend routes
+//   /api/users/:userId/friends/:friendId
+//router.route('/:userId/friends/:friendId').post(addFriend).delete(deleteFriend)
 
 
 module.exports = router

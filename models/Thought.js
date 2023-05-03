@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
-const Schema = require('./Assignment');
+const reactionSchema = require('./Reaction');
 
-// Schema to create Student model
+// Set structure for thought data
 const thoughtSchema = new Schema(
   {
     thoughtText: {
@@ -16,11 +16,11 @@ const thoughtSchema = new Schema(
           // format timestamp as readable string
           return new Date(timestamp).toLocaleString();
         }
-      },
-      username: {
+    },
+    username: {
         type: String,
         required: true,
-      },
+    },
     reactions:  [reactionSchema]
   },
   {
@@ -35,6 +35,7 @@ thoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
 });
 
-const User = model('Thought',thoughtSchema);
+// Provide interface to query thought data 
+const Thought = model('Thought',thoughtSchema);
 
-module.exports = User;
+module.exports = Thought;

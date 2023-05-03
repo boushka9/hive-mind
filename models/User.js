@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
-const Schema = require('./Assignment');
 
-// Schema to create Student model
+// Define structure for user data 
 const userSchema = new Schema(
   {
     username: {
@@ -37,6 +36,7 @@ userSchema.virtual('friendCount').get(function() {
     return this.friends.length;
 });
 
+// Provide interface for querying data
 const User = model('User', userSchema);
 
 module.exports = User;

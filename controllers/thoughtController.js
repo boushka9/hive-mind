@@ -32,7 +32,7 @@ module.exports = {
     }
   },
   // create a new thought
-  async createThoughts(req, res) {
+  async createThought(req, res) {
     try {
       const newThought = await Thought.create(req.body);
       // Return new thought data in JSON format 
@@ -42,7 +42,7 @@ module.exports = {
     }
   },
   // Update a thought by their id
-  async updateThoughts(req, res) {
+  async updateThought(req, res) {
     try {
         const updateThoughtData = await Thought.findByIdAndUpdate(
             { _id: req.params.thoughtId },
@@ -62,7 +62,7 @@ module.exports = {
   },
 
   // Find thought and their thoughts by thought id and delete them
-  async deleteThoughts(req, res) {
+  async deleteThought(req, res) {
     try {
       const deleteThought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
@@ -89,7 +89,7 @@ module.exports = {
   },
 
   // Add reaction to a thought
-  
+
 
   // Remove reaction from a thought
 

@@ -81,7 +81,7 @@ module.exports = {
         return res.status(404).json({ message: "No such thought ID in the user's array"})
       }
       // If thought was successfully deleted, send success msg
-      res.json({ message: 'Thought was successfully deleted' });
+      res.json(userThoughts);
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
@@ -89,8 +89,44 @@ module.exports = {
   },
 
   // Add reaction to a thought
+  async addReaction(req, res) {
+    try {
+        const addReaction = await Thought.findByIdAndUpdate(
+            { _id: req.params.thoughtId }, // Find the corresponding thought to the entered id
+            { $addToSet: { reactions: req.body } }, // If entered reaction is not in array, add it
+            { new: true } // Return updated Thought with added reaction
+        )
+        // If unable to add reaction
+        if(!addReaction) {
+            return res.status(404).json({ message: "Unable to add reaction to thought with that ID" })
+        }
+        // If added successfully, show updated reaction in JSON format
+        res.json(addReaction)
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err); 
+    }
+  },
 
 
   // Remove reaction from a thought
+  async deleteReaction(req, res) {
+    try {
+        const deleteReaction = await Thought.findOneAndUpdate( // Find a single thought and update it by removing a reaction
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { id: req.params.reactionId } } }, // Find entered ID in reactions array and remove it
+            { new: true } // Return updated Thought with reaction removed 
+        )
+        // If no reaction found to delete
+        if(!deleteReaction) {
+            return res.status(404).json({ message: "Unable to add reaction to thought with that ID" })
+        }
+        // If added successfully, show updated reaction in JSON format
+        res.json(deleteReaction);
+    }catch (err) {
+        console.log(err);
+        res.status(500).json(err); 
+    }
+  }
 
 };

@@ -71,17 +71,17 @@ module.exports = {
         return res.status(404).json({ message: 'No such thought exists' });
       }
 
-      // Remove the corresponding thoughtID from the Users thoughts array
-      const userThoughts = await User.findOneAndUpdate(
-        { thoughts: req.params.thoughtId }, // Find the thought by it's id
-        { $pull: { thoughts: req.params.thoughtId } }, // Pull (remove) that id from the User's thought array
-        { new: true } // Return the updated User document 
-      )
-      if (!userThoughts) {
-        return res.status(404).json({ message: "No such thought ID in the user's array"})
-      }
+      // // Remove the corresponding thoughtID from the Users thoughts array
+      // const userThoughts = await User.findOneAndUpdate(
+      //   { thoughts: req.params.thoughtId }, // Find the thought by it's id
+      //   { $pull: { thoughts: req.params.thoughtId } }, // Pull (remove) that id from the User's thought array
+      //   { new: true } // Return the updated User document 
+      // )
+      // if (!userThoughts) {
+      //   return res.status(404).json({ message: "No such thought ID in the user's array"})
+      // }
       // If thought was successfully deleted, send success msg
-      res.json(userThoughts);
+      res.json({ message: "Thought successfully deleted!"});
     } catch (err) {
       console.log(err);
       res.status(500).json(err);

@@ -122,7 +122,7 @@ module.exports = {
         }
 
         // If friend is removed respond with updated User/friends in JSON format
-        res.json(deleteFriend)
+        res.json({ message: "Successfully deleted friend"})
     }
     catch (err) {
         console.log(err);

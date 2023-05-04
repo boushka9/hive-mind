@@ -22,6 +22,7 @@
   2. Type `npm i` to install dependencies
 
   3. Type `npm run start` to start server and connect to the MongoDB
+  
     * This application will run on `http://localhost:3001/` and should be tested using Insomnia
   
 
